@@ -7,6 +7,7 @@ class AnimatedScatter(object):
     def __init__(self, generator, ax_limits):
         self.stream = generator()
         self.ax_limits = ax_limits
+        self.colors = None
 
         # Setup the figure and axes...
         self.fig, self.ax = plt.subplots()
@@ -16,8 +17,11 @@ class AnimatedScatter(object):
 
     def setup_plot(self):
         """Initial drawing of the scatter plot."""
-        x, y, s, c = next(self.stream).T
-        self.scat = self.ax.scatter(x, y, c=c, s=s, vmin=0, vmax=1,
+        x, y, s = next(self.stream).T
+
+        self.color = np.random.random((len(x))).T
+
+        self.scat = self.ax.scatter(x, y, s=s, vmin=0, vmax=1,
                                     cmap="jet", edgecolor="k")
         self.ax.axis(self.ax_limits)
         # For FuncAnimation's sake, we need to return the artist we'll be using
@@ -33,7 +37,7 @@ class AnimatedScatter(object):
         # Set sizes...
         self.scat.set_sizes(300 * abs(data[:, 2])**1.5 + 100)
         # Set colors..
-        self.scat.set_array(data[:, 3])
+        self.scat.set_array(self.color)
 
         # We need to return the updated artist for FuncAnimation to draw..
         # Note that it expects a sequence of artists, thus the trailing comma.
