@@ -1,4 +1,4 @@
-import collider
+import simulation
 import numpy as np
 
 def test_out_of_lower_bound():
