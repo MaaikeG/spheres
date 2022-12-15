@@ -2,8 +2,8 @@ import numpy as np
 from animate import AnimatedScatter
 import matplotlib.pyplot as plt
 from simulation import NonInteractingParticlesSimulation
-from boundary_conditions import BounceFromBoundaries, PassThroughBoundaries
-from integrator import SimpleIntegrator, RandomizedIntegrator
+from boundary_conditions import BounceFromBoundaries
+from integrator import SimpleIntegrator
 import initial_conditions
 
 
