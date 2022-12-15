@@ -7,18 +7,19 @@ class NonInteractingParticlesSimulation():
         self.handle_boundary_conditions = boundary_condition_handler
         self.integrator = integrator
 
-    def update(self, qs, ps, radii):
-        qs, ps = self.integrator(qs, ps)
-        qs, ps = self.handle_boundary_conditions(qs, ps, radii)
-        return qs, ps
+    def update(self, data):
+        data.qs, data.ps = self.integrator(data.qs, data.ps)
+        data = self.handle_boundary_conditions(data)
+        return data
 
 
-    def simulate(self, q_initial, p_initial, radii):
+    def simulate(self, data_initial):
         def generator():
-            qs = q_initial
-            ps = p_initial
+            data = data_initial
+            # qs = q_initial
+            # ps = p_initial
             
             while True:
-                qs, ps = self.update(qs, ps, radii)
-                yield np.c_[qs[:, 0], qs[:, 1], 1e3 * radii]
+                data = self.update(data)
+                yield data #np.c_[qs[:, 0], qs[:, 1], 1e3 * radii]
         return generator
