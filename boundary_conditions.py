@@ -45,3 +45,18 @@ class BounceFromBoundaries(BoundaryConditionHandler):
         data.ps[:, d][out_of_bounds] *= -1
         return data
 
+class PassThroughBoundaries(BoundaryConditionHandler):
+    def __init__(self, boundaries=None):
+        super().__init__(boundaries)
+
+    def _handle_boundary_conditions_1d(self, data, d):
+        data.qs[:, d] = np.where(
+            get_out_of_upper_bound(data.qs[:, d], data.ps[:, d], self.boundaries[d]),
+            self.boundaries[d][0], 
+            data.qs[:, d])
+        
+        data.qs[:, d] = np.where(
+            get_out_of_lower_bound(data.qs[:, d], data.ps[:, d], self.boundaries[d]), 
+            self.boundaries[d][1], 
+            data.qs[:, d])
+        return data
